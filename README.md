@@ -1,6 +1,6 @@
 # json-2-csv-lambda
 
-Clouformation stack that automatically transforms json files to csv when a file is uploaded to S3
+Clouformation stack that automatically transforms json files to csv when a file is uploaded to S3 and post a message to Slack if there is a problem with the file.
 
 ## Getting Started
 
