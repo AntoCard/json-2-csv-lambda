@@ -1,0 +1,76 @@
+#!/bin/bash
+
+STACK_NAME=""
+LAMBDA_BUCKET=""
+BUCKET_NAME=""
+SLACK_API_TOKEN=""
+SLACK_CHANNEL=""
+
+
+usage() {
+  printf "
+    Usage: Creates a CF json2csv stack
+
+    Where:
+        -s = Stack name - Name of the Cloudformation stack
+        -l = Lambda bucket - S3 bucket name where to store the lambda - Will be created if doesn't exist
+        -b = Bucket - S3 bucket where to store csv and json files - Will be created in the stack.
+        -c = Channel - Slack channel -  Channel where to post json processing errors
+        -t = Token - Slack token - Needed to authenticate against your Slack account
+
+    "
+}
+
+
+deploy() {
+  aws s3 mb s3://"$LAMBDA_BUCKET"
+
+
+  aws cloudformation package \
+    --template template/json2csv_lambda_cf.yml \
+    --s3-bucket "$LAMBDA_BUCKET" \
+    --output-template-file packaged-template.yml
+
+
+  aws cloudformation create-stack \
+    --stack-name "$STACK_NAME" \
+    --template-body file://packaged-template.yml \
+    --capabilities CAPABILITY_IAM \
+    --parameters ParameterKey=BucketName,ParameterValue="$BUCKET_NAME" \
+                 ParameterKey=SlackApiToken,ParameterValue="$SLACK_API_TOKEN" \
+                 ParameterKey=SlackChannel,ParameterValue="$SLACK_CHANNEL"
+}
+
+
+while getopts "s:l:b:c:t:" o; do
+    case "${o}" in
+        s)
+            STACK_NAME=${OPTARG}
+            ;;
+        l)
+            LAMBDA_BUCKET=${OPTARG}
+            ;;
+        b)
+            BUCKET_NAME=${OPTARG}
+            ;;
+        c)
+            SLACK_API_TOKEN=${OPTARG}
+            ;;
+        t)
+            SLACK_CHANNEL=${OPTARG}
+            ;;
+        *)
+            usage
+            ;;
+    esac
+done
+
+shift $((OPTIND-1))
+
+if [ -z "${STACK_NAME}" ] || [ -z "${LAMBDA_BUCKET}" ] || [ -z "${BUCKET_NAME}" ] || \
+   [ -z "${SLACK_API_TOKEN}"  ] || [ -z "${SLACK_CHANNEL}"  ]; then
+    usage
+else
+    deploy
+fi
+
