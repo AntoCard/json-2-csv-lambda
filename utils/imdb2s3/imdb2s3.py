@@ -26,8 +26,6 @@ def upload_to_s3_ia(bucket_name, file_name, content):
     file_name = file_name.replace('+', '')
     s3.Object(bucket_name, 'json/' + file_name + '.json').put(Body=json.dumps(content),
                                                                StorageClass='STANDARD_IA')
-    print(file_name)
-    #s3.Object(bucket_name, 'json/' + file_name + '.json').put(Body=json.dumps(r.json()), StorageClass='STANDARD_IA')
 
 
 def main():

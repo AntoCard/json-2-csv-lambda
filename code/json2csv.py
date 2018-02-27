@@ -29,7 +29,7 @@ def lambda_handler(event, context):
 
         source = download_json(bucket, key)
         output = os.path.splitext(source)[0] + '.csv'
-        convert_csv_2_json(source, output)
+        convert_json_2_csv(source, output)
         upload_csv(output, bucket)
 
     logger.info("{0} records processed.".format(len(event['Records'])))
@@ -62,8 +62,8 @@ def download_json(bucket, key):
     return local_source_json
 
 
-def convert_csv_2_json(input_file, output_file):
-    logger.debug('Start convert_csv_2_json')
+def convert_json_2_csv(input_file, output_file):
+    logger.debug('Start convert_json_2_csv')
     csv_file = open(output_file, 'w')
 
     try:
@@ -85,7 +85,7 @@ def convert_csv_2_json(input_file, output_file):
     else:
         json_2_csv.convert_to_csv(json_data, csv_file)
         csv_file.close()
-        logger.debug("Finished convert_csv_2_json for {0}".format(input_file))
+        logger.debug("Finished convert_json_2_csv for {0}".format(input_file))
 
 
 def upload_csv(local_csv_file, bucket):
