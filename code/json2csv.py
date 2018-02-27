@@ -22,6 +22,7 @@ def lambda_handler(event, context):
         bucket = s3['bucket']['name']
         key = s3['object']['key']
 
+        # Needed when a delete event on a csv file
         if '.csv' in key:
             logger.debug("found .csv in key {0}".format(key))
             key = key.replace('csv', 'json')
@@ -91,4 +92,4 @@ def upload_csv(local_csv_file, bucket):
     basename = os.path.basename(local_csv_file)
     full_key = "{0}/{1}".format(s3_csv_dir, basename)
     logger.debug('uploading to S3 bucket: {}, key: {}'.format(bucket, full_key))
-    client.upload_file(local_csv_file, bucket, full_key)
+    client.upload_file(local_csv_file, bucket, full_key, ExtraArgs={'StorageClass': 'REDUCED_REDUNDANCY'})
