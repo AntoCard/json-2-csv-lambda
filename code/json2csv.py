@@ -22,6 +22,10 @@ def lambda_handler(event, context):
         bucket = s3['bucket']['name']
         key = s3['object']['key']
 
+        if '.csv' in key:
+            logger.debug("found .csv in key {0}".format(key))
+            key = key.replace('csv', 'json')
+
         source = download_json(bucket, key)
         output = os.path.splitext(source)[0] + '.csv'
         convert_csv_2_json(source, output)

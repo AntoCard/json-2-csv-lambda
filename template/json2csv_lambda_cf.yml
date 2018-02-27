@@ -24,7 +24,23 @@ Resources:
               Rules:
                 -
                   Name: suffix
-                  Value: json
+                  Value: .json
+        - Event: 's3:ObjectRemoved:*'
+          Function: !GetAtt Json2csvLambda.Arn
+          Filter:
+            S3Key:
+              Rules:
+                -
+                  Name: suffix
+                  Value: .csv
+        - Event: 's3:ReducedRedundancyLostObject'
+          Function: !GetAtt Json2csvLambda.Arn
+          Filter:
+            S3Key:
+              Rules:
+                -
+                  Name: suffix
+                  Value: .csv
   BucketPermission:
     Type: AWS::Lambda::Permission
     Properties:
