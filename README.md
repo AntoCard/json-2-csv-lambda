@@ -13,7 +13,10 @@ Instructions to set up and run this project
 
 ### Prerequisites
 
-You need aws-cli and bash to deploy using the "deploy" wrapper
+You need valid AWS credentials either in env vars or in the `.aws` directory.
+https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html
+
+aws-cli and bash to deploy using the "deploy" wrapper
 
 ### Installing
 
