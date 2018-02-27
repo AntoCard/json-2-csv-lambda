@@ -38,7 +38,7 @@ deploy() {
     --capabilities CAPABILITY_IAM \
     --parameters ParameterKey=BucketName,ParameterValue="$BUCKET_NAME" \
                  ParameterKey=SlackApiToken,ParameterValue="$SLACK_API_TOKEN" \
-                 ParameterKey=SlackChannel,ParameterValue="$SLACK_CHANNEL"
+                 ParameterKey=SlackChannel,ParameterValue=\#"$SLACK_CHANNEL"
 }
 
 
@@ -54,10 +54,10 @@ while getopts "s:l:b:c:t:" o; do
             BUCKET_NAME=${OPTARG}
             ;;
         c)
-            SLACK_API_TOKEN=${OPTARG}
+            SLACK_CHANNEL=${OPTARG}
             ;;
         t)
-            SLACK_CHANNEL=${OPTARG}
+            SLACK_API_TOKEN=${OPTARG}
             ;;
         *)
             usage
