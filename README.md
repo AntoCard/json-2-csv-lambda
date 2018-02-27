@@ -69,7 +69,7 @@ Example:
 ./imdb-get.py -m 'The+Italian+Job' -k my_imdb_api_key -b mybucket
 ```
 
-### Using a omdb json example
+### Using an OMDB json example or any other json file
 
 In the `examples` directory you can find three json files:
 
